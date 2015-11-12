@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>Character sheet</title>
+
+    <!-- Bootstrap -->
+    <link href="css/bootstrap.css" rel="stylesheet">
+    <link href="css/rpg.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <nav class="navbar navbar-default">
+      <div class="container-fluid">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="#">RPG</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <ul class="nav navbar-nav navbar-right">
+            <li><a id="button-load-data" class="btn">Load</a></li>
+            <li><a id="button-save-data" class="btn">Save</a></li>
+          </ul>
+        </div><!--/.nav-collapse -->
+      </div><!--/.container-fluid -->
+    </nav>
+
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-3 bordered">
+          <h3>Tulajdonságok</h3>
+          <table class="table table-striped attributes">
+            <tr>
+              <th>Erő</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="strength"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-strength" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="strength"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Ügyesség</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="dexterity"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-dexterity" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="dexterity"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Gyorsaság</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="speed"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-speed" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="speed"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Állóképesség</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="stanima"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-stanima" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="stanima"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Egészség</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="health"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-health" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="health"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Szépség</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="beauty"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-beauty" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="beauty"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Intelligencia</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="intelligence"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-intelligence" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="intelligence"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Akaraterő</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="will-power"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-will-power" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="will-power"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+            <tr>
+              <th>Asztrál</th>
+              <td>
+                <button type="button" class="btn btn-xs" data-type="astral"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+                <span id="attribute-astral" data-value="10"></span>
+                <button type="button" class="btn btn-xs" data-type="astral"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+              </td>
+            </tr>
+          </table>
+
+        </div>
+      </div>
+    </div>
+
+    <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <!-- Include all compiled plugins (below), or include individual files as needed -->
+    <script src="js/bootstrap.js"></script>
+
+    <script>
+
+function attribute_button_handler() {
+    var button = $(this);
+    var attribute = $("#attribute-" + $(this).data("type"));
+    var value = attribute.data("value") | 0;
+    var is_decrem = button.find(".glyphicon-minus").length
+
+    value = is_decrem ? value - 1 : value + 1;
+
+    attribute.data("value", value);
+    attribute.text(value).trigger("change");
+}
+
+function connect_attribute_buttons() {
+    var buttons = $(".attributes button");
+
+    buttons.click(attribute_button_handler);
+}
+
+function local_save_data() {
+    var data = {
+        attributes: {},
+    };
+
+    for (var i = 0; i < attributes_list.length; i++) {
+        var attr = attributes_list[i];
+        data.attributes[attr] = $("#attribute-" + attr).data("value");
+    }
+
+    window.localStorage.setItem("rpg-data", JSON.stringify(data));
+}
+
+function local_load_data() {
+    var raw_data = window.localStorage.getItem("rpg-data");
+
+    if (!raw_data) {
+        return;
+    }
+
+    var data = JSON.parse(raw_data);
+    for (var i = 0; i < attributes_list.length; i++) {
+        var attr = attributes_list[i];
+        var span_attr = $("#attribute-" + attr);
+        var value = data.attributes[attr];
+
+        span_attr.data("value", value);
+        span_attr.text(value).trigger("change");
+    }  
+}
+
+function on_attribute_change(event) {
+    var span = $(this);
+    console.log(span);
+}
+
+var attributes_list = [
+    "strength",
+    "dexterity",
+    "speed",
+    "stanima",
+    "health",
+    "beauty",
+    "intelligence",
+    "will-power",
+    "astral"
+];
+
+$(document).ready(function() {
+    for (var i = 0; i < attributes_list.length; i++) {
+        var attribute = $("#attribute-" + attributes_list[i]);
+        if (attribute) {
+            attribute.text(attribute.data("value"));
+        }
+
+        attribute.on("change", on_attribute_change);
+    }
+
+    connect_attribute_buttons();
+    $("#button-load-data").click(local_load_data);
+    $("#button-save-data").click(local_save_data);
+});
+
+    </script>
+
+  </body>
+</html>
