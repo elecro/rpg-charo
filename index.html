@@ -38,81 +38,9 @@
       <div class="row">
         <div class="col-xs-3 bordered">
           <h3>Tulajdonságok</h3>
-          <table class="table table-striped attributes">
-            <tr>
-              <th>Erő</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="strength"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-strength" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="strength"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Ügyesség</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="dexterity"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-dexterity" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="dexterity"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Gyorsaság</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="speed"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-speed" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="speed"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Állóképesség</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="stanima"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-stanima" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="stanima"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Egészség</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="health"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-health" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="health"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Szépség</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="beauty"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-beauty" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="beauty"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Intelligencia</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="intelligence"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-intelligence" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="intelligence"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Akaraterő</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="will-power"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-will-power" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="will-power"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
-            <tr>
-              <th>Asztrál</th>
-              <td>
-                <button type="button" class="btn btn-xs" data-type="astral"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
-                <span id="attribute-astral" data-value="10"></span>
-                <button type="button" class="btn btn-xs" data-type="astral"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
-              </td>
-            </tr>
+          <div id="attributes-table">
+          </div>
           </table>
-
         </div>
       </div>
     </div>
@@ -121,8 +49,32 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <script src="js/bootstrap.js"></script>
+    <script src="js/handlebars-v4.0.4.js"></script>
+
+    <script id="template-attributes-table" type="text/x-handlebars-template">
+       <table class="table table-striped attributes">
+       {{#each attributes}}
+         <tr>
+           <th>{{name}}</th>
+           <td>
+             <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+             <span id="attribute-{{type}}" data-value="10"></span>
+             <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+           </td>
+         </tr>
+         {{/each}}
+       </table>
+    </script>
 
     <script>
+
+function attribute_table_build() {
+    var template_source = $("#template-attributes-table").html();
+    var template = Handlebars.compile(template_source);
+
+    var html = template({attributes: attributes_list});
+    $("#attributes-table").html(html);
+}
 
 function attribute_button_handler() {
     var button = $(this);
@@ -142,13 +94,24 @@ function connect_attribute_buttons() {
     buttons.click(attribute_button_handler);
 }
 
+function connect_attribute_display() {
+    for (var i = 0; i < attributes_list.length; i++) {
+        var attribute = $("#attribute-" + attributes_list[i].type);
+        if (attribute) {
+            attribute.text(attribute.data("value"));
+        }
+
+        attribute.on("change", on_attribute_change);
+    }
+}
+
 function local_save_data() {
     var data = {
         attributes: {},
     };
 
     for (var i = 0; i < attributes_list.length; i++) {
-        var attr = attributes_list[i];
+        var attr = attributes_list[i].type;
         data.attributes[attr] = $("#attribute-" + attr).data("value");
     }
 
@@ -164,7 +127,7 @@ function local_load_data() {
 
     var data = JSON.parse(raw_data);
     for (var i = 0; i < attributes_list.length; i++) {
-        var attr = attributes_list[i];
+        var attr = attributes_list[i].type;
         var span_attr = $("#attribute-" + attr);
         var value = data.attributes[attr];
 
@@ -179,28 +142,22 @@ function on_attribute_change(event) {
 }
 
 var attributes_list = [
-    "strength",
-    "dexterity",
-    "speed",
-    "stanima",
-    "health",
-    "beauty",
-    "intelligence",
-    "will-power",
-    "astral"
+    { name: "Erő", type: "strength" },
+    { name: "Ügyesség", type: "dexterity" },
+    { name: "Gyorsaság", type: "speed" },
+    { name: "Állóképesség", type: "stanima" },
+    { name: "Egészség", type: "health" },
+    { name: "Szépség", type: "beauty" },
+    { name: "Intelligencia", type: "intelligence" },
+    { name: "Akaraterő", type: "will-power" },
+    { name: "Asztrál", type: "astral" }
 ];
 
 $(document).ready(function() {
-    for (var i = 0; i < attributes_list.length; i++) {
-        var attribute = $("#attribute-" + attributes_list[i]);
-        if (attribute) {
-            attribute.text(attribute.data("value"));
-        }
-
-        attribute.on("change", on_attribute_change);
-    }
-
+    attribute_table_build();
+    connect_attribute_display();
     connect_attribute_buttons();
+
     $("#button-load-data").click(local_load_data);
     $("#button-save-data").click(local_save_data);
 });
