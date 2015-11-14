@@ -38,13 +38,13 @@
       <div class="row">
         <div class="col-xs-3 bordered">
           <h3>Tulajdonságok</h3>
-          <div id="attributes-table">
+          <div id="attributes-table-content">
           </div>
           </table>
         </div>
         <div class="col-xs-2 bordered">
           <h3>Életerő</h3>
-          <div id="health-table">
+          <div id="health-table-content">
           </div>
         </div>
       </div>
@@ -56,7 +56,7 @@
     <script src="js/bootstrap.js"></script>
     <script src="js/handlebars-v4.0.4.js"></script>
 
-    <script id="template-attributes-table" type="text/x-handlebars-template">
+    <script id="attributes-table-template" type="text/x-handlebars-template">
        <table class="table table-striped attributes">
        {{#each attributes}}
          <tr>
@@ -71,7 +71,7 @@
        </table>
     </script>
 
-    <script id="template-health-table" type="text/x-handlebars-template">
+    <script id="health-table-template" type="text/x-handlebars-template">
        <table class="table table-striped health">
        {{#each attributes}}
          <tr>

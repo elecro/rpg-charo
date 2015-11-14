@@ -1,16 +1,9 @@
-function health_table_build() {
-    var template_source = $("#template-health-table").html();
+function build_from_template(prefix, context) {
+    var template_source = $(prefix + "-template").html();
     var template = Handlebars.compile(template_source);
 
-    var html = template({attributes: health_attributes_list});
-    $("#health-table").html(html);
-}
-
-function attribute_table_build() {
-    var template_source = $("#template-attributes-table").html();
-    var template = Handlebars.compile(template_source);
-    var html = template({attributes: attributes_list});
-    $("#attributes-table").html(html);
+    var html = template(context);
+    $(prefix + "-content").html(html);
 }
 
 function build_attribute_button_handler(prefix) {
@@ -156,11 +149,12 @@ function on_connected_update(e) {
 }
 
 $(document).ready(function() {
-    attribute_table_build();
+    build_from_template("#attributes-table", { attributes: attributes_list });
     connect_attribute_display("#attribute", attributes_list);
     connect_attribute_buttons("table.attributes", "#attribute");
 
-    health_table_build();
+
+    build_from_template("#health-table", { attributes: health_attributes_list });
     connect_attribute_display("#health", health_attributes_list);
     connect_attribute_buttons("table.health", "#health");
 
