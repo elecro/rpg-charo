@@ -101,18 +101,30 @@ var attributes_list = [
 
 var health_attributes_list = [
     // has 'health-' prefix
-    { name: "Alap ÉP", type: "base-hp" },
-    { name: "Max ÉP", type: "max-hp" },
-    { name: "Akt. ÉP:", type: "current-hp" },
+    { name: "ÉP alap", type: "base-hp" },
+    { name: "ÉP max", type: "max-hp" },
+    { name: "ÉP akt.", type: "current-hp" },
 
-    { name: "Alap FP", type: "base-fp" },
-    { name: "Max FP", type: "max-fp" },
-    { name: "Akt. FP:", type: "current-fp" },
+    { name: "FP alap", type: "base-fp" },
+    { name: "FP max", type: "max-fp" },
+    { name: "FP akt.", type: "current-fp" },
+];
+
+var base_fight_attributes_list = [
+    // has 'base-fight-' prefix
+    { name: "KÉ alap", type: "ke-base" },
+    { name: "KÉ mod.", type: "ke-mod" },
+    { name: "KÉ akt.", type: "ke-calc" },
+
+    { name: "TÉ alap", type: "te-base" },
+    { name: "TÉ mod.", type: "te-mod" },
+    { name: "TÉ akt.", type: "te-calc" },
 ];
 
 var data_sets = [
     { name: "attributes_list", prefix: "#attribute" },
     { name: "health_attributes_list", prefix: "#health" },
+    { name: "base_fight_attributes_list", prefix: "#base-fight" },
 ];
 
 var data_connections = [
@@ -134,6 +146,32 @@ var data_connections = [
         var willpower = over_10($("#attribute-will-power").data("value") | 0);
         var value = $("#health-base-fp").data("value") + stanima + willpower;
         $(update).data("value", value).text(value).trigger("chage");
+      }
+    },
+
+    { name: "on-ke-attr-change",
+      on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ke-base", "#base-fight-ke-mod"],
+      update: "#base-fight-ke-calc",
+      handler: function (on, update) {
+        var dexterity = over_10($("#attribute-dexterity").data("value") | 0);
+        var speed = over_10($("#attribute-speed").data("value") | 0);
+        var ke_base = $("#base-fight-ke-base").data("value") | 0;
+        var ke_mod = $("#base-fight-ke-mod").data("value");
+        var value = ke_base + ke_mod + speed + dexterity;
+        $(update).data("value", value).text(value).trigger("change");
+      }
+    },
+    { name: "on-te-attr-change",
+      on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
+      update: "#base-fight-te-calc",
+      handler: function (on, update) {
+        var strength = over_10($("#attribute-strength").data("value") | 0);
+        var dexterity = over_10($("#attribute-dexterity").data("value") | 0);
+        var speed = over_10($("#attribute-speed").data("value") | 0);
+        var te_base = $("#base-fight-te-base").data("value") | 0;
+        var te_mod = $("#base-fight-te-mod").data("value");
+        var value = te_base + te_mod + strength + speed + dexterity;
+        $(update).data("value", value).text(value).trigger("change");
       }
     },
 ];
@@ -168,10 +206,13 @@ $(document).ready(function() {
     connect_attribute_display("#attribute", attributes_list);
     connect_attribute_buttons("table.attributes", "#attribute");
 
-
     build_from_template("#health-table", { attributes: health_attributes_list });
     connect_attribute_display("#health", health_attributes_list);
     connect_attribute_buttons("table.health", "#health");
+
+    build_from_template("#base-fight-table", { attributes: base_fight_attributes_list });
+    connect_attribute_display("#base-fight", base_fight_attributes_list);
+    connect_attribute_buttons("table.base-fight", "#base-fight");
 
     connect_data_connections();
     $("#button-load-data").click(local_load_data);

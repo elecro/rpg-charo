@@ -42,11 +42,19 @@
           </div>
           </table>
         </div>
+
         <div class="col-xs-2 bordered">
           <h3>Életerő</h3>
           <div id="health-table-content">
           </div>
         </div>
+
+        <div class="col-xs-2 bordered">
+          <h3>Harci tulajdonságok</h3>
+          <div id="base-fight-table-content">
+          </div>
+        </div>
+
       </div>
     </div>
 
@@ -79,6 +87,21 @@
            <td>
              <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
              <span id="health-{{type}}" data-value="1"></span>
+             <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
+           </td>
+         </tr>
+         {{/each}}
+       </table>
+    </script>
+
+    <script id="base-fight-table-template" type="text/x-handlebars-template">
+       <table class="table table-striped base-fight">
+       {{#each attributes}}
+         <tr>
+           <th>{{name}}</th>
+           <td>
+             <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-minus" aria-hidden="true"></span></button>
+             <span id="base-fight-{{type}}" data-value="1"></span>
              <button type="button" class="btn btn-xs" data-type="{{type}}"><span class="glyphicon glyphicon-plus" aria-hidden="true"></span></button>
            </td>
          </tr>
