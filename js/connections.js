@@ -7,41 +7,42 @@ $(document).ready(function() {
         $(update).data("value", value).text(value).trigger("change");
     }
 
+    var attr = get_attr_selector;
     connections = [
         {
             name: "on-hp-attr-change",
-            on: ["#attribute-health", "#health-base-hp"],
-            update: "#health-max-hp",
+            on: [attr("health"), attr("base-hp")],
+            update: attr("max-hp"),
             handler: handler_attribute_change
         },
         {
             name: "on-fp-attr-change",
-            on: ["#attribute-stanima", "#attribute-will-power", "#health-base-fp"],
-            update: "#health-max-fp",
+            on: [attr("stanima"), attr("will-power"), attr("base-fp")],
+            update: attr("max-fp"),
             handler: handler_attribute_change
         },
         {
             name: "on-ke-attr-change",
-            on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ke-base", "#base-fight-ke-mod"],
-            update: "#base-fight-ke-calc",
+            on: [attr("dexterity"), attr("speed"), attr("ke-base"), attr("ke-mod")],
+            update: attr("ke-calc"),
             handler: handler_attribute_change
         },
         {
             name: "on-te-attr-change",
-            on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
-            update: "#base-fight-te-calc",
+            on: [attr("strength"), attr("dexterity"), attr("speed"), attr("te-base"), attr("te-mod")],
+            update: attr("te-calc"),
             handler: handler_attribute_change
         },
         {
             name: "on-ve-attr-change",
-            on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ve-base", "#base-fight-ve-mod"],
-            update: "#base-fight-ve-calc",
+            on: [attr("dexterity"), attr("speed"), attr("ve-base"), attr("ve-mod")],
+            update: attr("ve-calc"),
             handler: handler_attribute_change
         },
         {
             name: "on-ce-attr-change",
-            on: ["#attribute-dexterity", "#base-fight-ce-base", "#base-fight-ce-mod"],
-            update: "#base-fight-ce-calc",
+            on: [attr("dexterity"), attr("ce-base"), attr("ce-mod")],
+            update: attr("ce-calc"),
             handler: handler_attribute_change
         },
     ];

@@ -82,6 +82,21 @@ function on_attribute_change(event) {
     console.log(span);
 }
 
+function get_attr_selector(attr_name) {
+    for (var i = 0; i < data_sets.length; i++) {
+        var prefix = data_sets[i].prefix;
+        var data_set = window[data_sets[i].name];
+
+        for (var j = 0; j < data_set.length; j++) {
+            if (data_set[j].type == attr_name) {
+                return prefix + "-" + attr_name;
+            }
+        }
+    }
+
+    return;
+}
+
 var attributes_list = [
     // has 'attribute-' prefix
     { name: "Erő", type: "strength" },
