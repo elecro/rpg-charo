@@ -1,3 +1,7 @@
+function over_10(value) {
+    return value > 10 ? value - 10 : 0;
+}
+
 function build_from_template(prefix, context) {
     var template_source = $(prefix + "-template").html();
     var template = Handlebars.compile(template_source);
@@ -100,6 +104,10 @@ var health_attributes_list = [
     { name: "Alap ÉP", type: "base-hp" },
     { name: "Max ÉP", type: "max-hp" },
     { name: "Akt. ÉP:", type: "current-hp" },
+
+    { name: "Alap FP", type: "base-fp" },
+    { name: "Max FP", type: "max-fp" },
+    { name: "Akt. FP:", type: "current-fp" },
 ];
 
 var data_sets = [
@@ -108,8 +116,8 @@ var data_sets = [
 ];
 
 var data_connections = [
-    { name: "on-health-change",
-      on: "#attribute-health",
+    { name: "on-hp-attr-change",
+      on: ["#attribute-health", "#health-base-hp"],
       update: "#health-max-hp",
       handler: function (on, update) {
         var health_value = $("#attribute-health").data("value") | 0;
@@ -117,18 +125,22 @@ var data_connections = [
         $(update).data("value", value).text(value).trigger("chage");
       }
     },
-    { name: "on-base-hp-change",
-      on: "#health-base-hp",
-      update: "#health-max-hp",
-      handler: "on-health-change"    // defer the change operation to the other connection
+
+    { name: "on-fp-attr-change",
+      on: ["#attribute-stanima", "#attribute-will-power"],
+      update: "#health-max-fp",
+      handler: function (on, update) {
+        var stanima = over_10($("#attribute-stanima").data("value") | 0);
+        var willpower = over_10($("#attribute-will-power").data("value") | 0);
+        var value = $("#health-base-fp").data("value") + stanima + willpower;
+        $(update).data("value", value).text(value).trigger("chage");
+      }
     },
 ];
 
 function connect_data_connections() {
     for (var i = 0; i < data_connections.length; i++) {
         var connection = data_connections[i];
-        var attribute = $(connection.on);
-
         if (typeof(connection.handler) === "string") {
             // We found a handler which defers its call to another connection's handler
             // select that handler and modify the current connection.
@@ -140,7 +152,10 @@ function connect_data_connections() {
             }
         }
 
-        attribute.on("change", connection, on_connected_update);
+        for (var j = 0; j < connection.on.length; j++) {
+            var attribute = $(connection.on[j]);
+            attribute.on("change", connection, on_connected_update);
+        }
     }
 }
 
