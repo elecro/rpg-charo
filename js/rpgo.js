@@ -115,6 +115,14 @@ var base_fight_attributes_list = [
     { name: "TÉ alap", type: "te-base" },
     { name: "TÉ mod.", type: "te-mod" },
     { name: "TÉ akt.", type: "te-calc" },
+
+    { name: "VÉ alap", type: "ve-base" },
+    { name: "VÉ mod.", type: "ve-mod" },
+    { name: "VÉ akt.", type: "ve-calc" },
+
+    { name: "CÉ alap", type: "ce-base" },
+    { name: "CÉ mod.", type: "ce-mod" },
+    { name: "CÉ akt.", type: "ce-calc" },
 ];
 
 var data_sets = [
@@ -144,6 +152,16 @@ var data_connections = [
     { name: "on-te-attr-change",
       on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
       update: "#base-fight-te-calc",
+      handler: handler_attribute_change
+    },
+    { name: "on-ve-attr-change",
+      on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ve-base", "#base-fight-ve-mod"],
+      update: "#base-fight-ve-calc",
+      handler: handler_attribute_change
+    },
+    { name: "on-ce-attr-change",
+      on: ["#attribute-dexterity", "#base-fight-ce-base", "#base-fight-ce-mod"],
+      update: "#base-fight-ce-calc",
       handler: handler_attribute_change
     },
 ];
