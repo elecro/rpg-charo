@@ -90,6 +90,7 @@ function on_attribute_change(event) {
 }
 
 var attributes_list = [
+    // has 'attribute-' prefix
     { name: "Erő", type: "strength" },
     { name: "Ügyesség", type: "dexterity" },
     { name: "Gyorsaság", type: "speed" },
@@ -102,6 +103,7 @@ var attributes_list = [
 ];
 
 var health_attributes_list = [
+    // has 'health-' prefix
     { name: "Alap ÉP", type: "base-hp" },
     { name: "Max ÉP", type: "max-hp" },
     { name: "Akt. ÉP:", type: "current-hp" },
@@ -112,6 +114,47 @@ var data_sets = [
     { name: "health_attributes_list", prefix: "#health" },
 ];
 
+var data_connections = [
+    { name: "on-health-change",
+      on: "#attribute-health",
+      update: "#health-max-hp",
+      handler: function (on, update) {
+        var health_value = $("#attribute-health").data("value") | 0;
+        var value = $("#health-base-hp").data("value") + (health_value > 10 ? health_value - 10 : 0);
+        $(update).data("value", value).text(value).trigger("chage");
+      }
+    },
+    { name: "on-base-hp-change",
+      on: "#health-base-hp",
+      update: "#health-max-hp",
+      handler: "on-health-change"    // defer the change operation to the other connection
+    },
+];
+
+function connect_data_connections() {
+    for (var i = 0; i < data_connections.length; i++) {
+        var connection = data_connections[i];
+        var attribute = $(connection.on);
+
+        if (typeof(connection.handler) === "string") {
+            // We found a handler which defers its call to another connection's handler
+            // select that handler and modify the current connection.
+            for (var j = 0; j < data_connections.length; i++) {
+                if (data_connections[j].name == connection.handler) {
+                    connection.handler = data_connections[j].handler;
+                    break;
+                }
+            }
+        }
+
+        attribute.on("change", connection, on_connected_update);
+    }
+}
+
+function on_connected_update(e) {
+    e.data.handler(e.data.on, e.data.update);
+}
+
 $(document).ready(function() {
     attribute_table_build();
     connect_attribute_display("#attribute", attributes_list);
@@ -121,6 +164,7 @@ $(document).ready(function() {
     connect_attribute_display("#health", health_attributes_list);
     connect_attribute_buttons("table.health", "#health");
 
+    connect_data_connections();
     $("#button-load-data").click(local_load_data);
     $("#button-save-data").click(local_save_data);
 });
