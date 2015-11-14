@@ -134,18 +134,18 @@ var data_connections = [
       handler: function (on, update) {
         var health_value = $("#attribute-health").data("value") | 0;
         var value = $("#health-base-hp").data("value") + (health_value > 10 ? health_value - 10 : 0);
-        $(update).data("value", value).text(value).trigger("chage");
+        $(update).data("value", value).text(value).trigger("change");
       }
     },
 
     { name: "on-fp-attr-change",
-      on: ["#attribute-stanima", "#attribute-will-power"],
+      on: ["#attribute-stanima", "#attribute-will-power", "#health-base-fp"],
       update: "#health-max-fp",
       handler: function (on, update) {
         var stanima = over_10($("#attribute-stanima").data("value") | 0);
         var willpower = over_10($("#attribute-will-power").data("value") | 0);
         var value = $("#health-base-fp").data("value") + stanima + willpower;
-        $(update).data("value", value).text(value).trigger("chage");
+        $(update).data("value", value).text(value).trigger("change");
       }
     },
 
