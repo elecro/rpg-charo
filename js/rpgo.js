@@ -1,7 +1,3 @@
-function over_10(value) {
-    return value > 10 ? value - 10 : 0;
-}
-
 function build_from_template(prefix, context) {
     var template_source = $(prefix + "-template").html();
     var template = Handlebars.compile(template_source);
@@ -132,8 +128,7 @@ var data_connections = [
       on: ["#attribute-health", "#health-base-hp"],
       update: "#health-max-hp",
       handler: function (on, update) {
-        var health_value = $("#attribute-health").data("value") | 0;
-        var value = $("#health-base-hp").data("value") + (health_value > 10 ? health_value - 10 : 0);
+        var value = calculate_from_attrs(on);
         $(update).data("value", value).text(value).trigger("change");
       }
     },
@@ -142,9 +137,7 @@ var data_connections = [
       on: ["#attribute-stanima", "#attribute-will-power", "#health-base-fp"],
       update: "#health-max-fp",
       handler: function (on, update) {
-        var stanima = over_10($("#attribute-stanima").data("value") | 0);
-        var willpower = over_10($("#attribute-will-power").data("value") | 0);
-        var value = $("#health-base-fp").data("value") + stanima + willpower;
+        var value = calculate_from_attrs(on);
         $(update).data("value", value).text(value).trigger("change");
       }
     },
@@ -153,11 +146,7 @@ var data_connections = [
       on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ke-base", "#base-fight-ke-mod"],
       update: "#base-fight-ke-calc",
       handler: function (on, update) {
-        var dexterity = over_10($("#attribute-dexterity").data("value") | 0);
-        var speed = over_10($("#attribute-speed").data("value") | 0);
-        var ke_base = $("#base-fight-ke-base").data("value") | 0;
-        var ke_mod = $("#base-fight-ke-mod").data("value");
-        var value = ke_base + ke_mod + speed + dexterity;
+        var value = calculate_from_attrs(on);
         $(update).data("value", value).text(value).trigger("change");
       }
     },
@@ -165,12 +154,7 @@ var data_connections = [
       on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
       update: "#base-fight-te-calc",
       handler: function (on, update) {
-        var strength = over_10($("#attribute-strength").data("value") | 0);
-        var dexterity = over_10($("#attribute-dexterity").data("value") | 0);
-        var speed = over_10($("#attribute-speed").data("value") | 0);
-        var te_base = $("#base-fight-te-base").data("value") | 0;
-        var te_mod = $("#base-fight-te-mod").data("value");
-        var value = te_base + te_mod + strength + speed + dexterity;
+        var value = calculate_from_attrs(on);
         $(update).data("value", value).text(value).trigger("change");
       }
     },
