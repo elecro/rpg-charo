@@ -127,36 +127,24 @@ var data_connections = [
     { name: "on-hp-attr-change",
       on: ["#attribute-health", "#health-base-hp"],
       update: "#health-max-hp",
-      handler: function (on, update) {
-        var value = calculate_from_attrs(on);
-        $(update).data("value", value).text(value).trigger("change");
-      }
+      handler: handler_attribute_change
     },
 
     { name: "on-fp-attr-change",
       on: ["#attribute-stanima", "#attribute-will-power", "#health-base-fp"],
       update: "#health-max-fp",
-      handler: function (on, update) {
-        var value = calculate_from_attrs(on);
-        $(update).data("value", value).text(value).trigger("change");
-      }
+      handler: handler_attribute_change
     },
 
     { name: "on-ke-attr-change",
       on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ke-base", "#base-fight-ke-mod"],
       update: "#base-fight-ke-calc",
-      handler: function (on, update) {
-        var value = calculate_from_attrs(on);
-        $(update).data("value", value).text(value).trigger("change");
-      }
+      handler: handler_attribute_change
     },
     { name: "on-te-attr-change",
       on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
       update: "#base-fight-te-calc",
-      handler: function (on, update) {
-        var value = calculate_from_attrs(on);
-        $(update).data("value", value).text(value).trigger("change");
-      }
+      handler: handler_attribute_change
     },
 ];
 

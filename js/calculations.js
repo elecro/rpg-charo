@@ -18,3 +18,8 @@ function calculate_from_attrs(attr_list) {
 
     return value;
 }
+
+function handler_attribute_change (on, update) {
+    var value = calculate_from_attrs(on);
+    $(update).data("value", value).text(value).trigger("change");
+}
