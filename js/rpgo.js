@@ -131,66 +131,6 @@ var data_sets = [
     { name: "base_fight_attributes_list", prefix: "#base-fight" },
 ];
 
-var data_connections = [
-    { name: "on-hp-attr-change",
-      on: ["#attribute-health", "#health-base-hp"],
-      update: "#health-max-hp",
-      handler: handler_attribute_change
-    },
-
-    { name: "on-fp-attr-change",
-      on: ["#attribute-stanima", "#attribute-will-power", "#health-base-fp"],
-      update: "#health-max-fp",
-      handler: handler_attribute_change
-    },
-
-    { name: "on-ke-attr-change",
-      on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ke-base", "#base-fight-ke-mod"],
-      update: "#base-fight-ke-calc",
-      handler: handler_attribute_change
-    },
-    { name: "on-te-attr-change",
-      on: ["#attribute-strength", "#attribute-dexterity", "#attribute-speed", "#base-fight-te-base", "#base-fight-te-mod"],
-      update: "#base-fight-te-calc",
-      handler: handler_attribute_change
-    },
-    { name: "on-ve-attr-change",
-      on: ["#attribute-dexterity", "#attribute-speed", "#base-fight-ve-base", "#base-fight-ve-mod"],
-      update: "#base-fight-ve-calc",
-      handler: handler_attribute_change
-    },
-    { name: "on-ce-attr-change",
-      on: ["#attribute-dexterity", "#base-fight-ce-base", "#base-fight-ce-mod"],
-      update: "#base-fight-ce-calc",
-      handler: handler_attribute_change
-    },
-];
-
-function connect_data_connections() {
-    for (var i = 0; i < data_connections.length; i++) {
-        var connection = data_connections[i];
-        if (typeof(connection.handler) === "string") {
-            // We found a handler which defers its call to another connection's handler
-            // select that handler and modify the current connection.
-            for (var j = 0; j < data_connections.length; i++) {
-                if (data_connections[j].name == connection.handler) {
-                    connection.handler = data_connections[j].handler;
-                    break;
-                }
-            }
-        }
-
-        for (var j = 0; j < connection.on.length; j++) {
-            var attribute = $(connection.on[j]);
-            attribute.on("change", connection, on_connected_update);
-        }
-    }
-}
-
-function on_connected_update(e) {
-    e.data.handler(e.data.on, e.data.update);
-}
-
 $(document).ready(function() {
     build_from_template("#attributes-table", { attributes: attributes_list });
     connect_attribute_display("#attribute", attributes_list);
@@ -204,7 +144,7 @@ $(document).ready(function() {
     connect_attribute_display("#base-fight", base_fight_attributes_list);
     connect_attribute_buttons("table.base-fight", "#base-fight");
 
-    connect_data_connections();
+    Connections.init();
     $("#button-load-data").click(local_load_data);
     $("#button-save-data").click(local_save_data);
 });
