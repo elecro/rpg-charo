@@ -45,6 +45,27 @@ $(document).ready(function() {
             update: attr("ce-calc"),
             handler: handler_attribute_change
         },
+
+        // Demo weapon integration
+        {
+            name: "weapon-0-calc-ke",
+            on: [attr("ke-calc"), "#weapon-0-ke-base", "#weapon-0-ke-mod"],
+            update: "#weapon-0-ke",
+            handler: handler_attribute_change
+        },
+        {
+            name: "weapon-0-calc-te",
+            on: [attr("te-calc"), "#weapon-0-te-base", "#weapon-0-te-mod"],
+            update: "#weapon-0-te",
+            handler: handler_attribute_change
+        },
+        {
+            name: "weapon-0-calc-ve",
+            on: [attr("ve-calc"), "#weapon-0-ve-base", "#weapon-0-ve-mod"],
+            update: "#weapon-0-ve",
+            handler: handler_attribute_change
+        },
+
     ];
 
     var DataConnector = function(connections) {

@@ -154,6 +154,8 @@ $(document).ready(function() {
     connect_attribute_display("#base-fight", base_fight_attributes_list);
     connect_attribute_buttons("table.base-fight");
 
+    connect_attribute_buttons("table.weapons", "#weapon-0");
+
     Connections.init();
     $("#button-load-data").click(local_load_data);
     $("#button-save-data").click(local_save_data);
