@@ -6,26 +6,21 @@ function build_from_template(prefix, context) {
     $(prefix + "-content").html(html);
 }
 
-function build_attribute_button_handler(prefix) {
-    function btn_handler() {
-        var button = $(this);
-        var attribute = $(prefix + "-" + button.data("type"));
-        var value = attribute.data("value") | 0;
-        var is_decrem = button.find(".glyphicon-minus").length
+function attribute_button_handler() {
+    var button = $(this);
+    var attribute = $(button.data("target"));
+    var value = attribute.data("value") | 0;
 
-        value = is_decrem ? value - 1 : value + 1;
+    value = (button.data("mode") == "dec") ? value - 1 : value + 1;
 
-        attribute.data("value", value);
-        attribute.text(value).trigger("change");
-    }
-
-    return btn_handler;
+    attribute.data("value", value);
+    attribute.text(value).trigger("change");
 }
 
-function connect_attribute_buttons(base_prefix, attr_prefix) {
+function connect_attribute_buttons(base_prefix) {
     var buttons = $(base_prefix + " button");
 
-    buttons.click(build_attribute_button_handler(attr_prefix));
+    buttons.click(attribute_button_handler);
 }
 
 function connect_attribute_display(prefix, lst) {
@@ -149,15 +144,15 @@ var data_sets = [
 $(document).ready(function() {
     build_from_template("#attributes-table", { attributes: attributes_list });
     connect_attribute_display("#attribute", attributes_list);
-    connect_attribute_buttons("table.attributes", "#attribute");
+    connect_attribute_buttons("table.attributes");
 
     build_from_template("#health-table", { attributes: health_attributes_list });
     connect_attribute_display("#health", health_attributes_list);
-    connect_attribute_buttons("table.health", "#health");
+    connect_attribute_buttons("table.health");
 
     build_from_template("#base-fight-table", { attributes: base_fight_attributes_list });
     connect_attribute_display("#base-fight", base_fight_attributes_list);
-    connect_attribute_buttons("table.base-fight", "#base-fight");
+    connect_attribute_buttons("table.base-fight");
 
     Connections.init();
     $("#button-load-data").click(local_load_data);
