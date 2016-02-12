@@ -27,10 +27,20 @@
         </div>
         <div id="navbar" class="navbar-collapse collapse">
           <ul class="nav navbar-nav navbar-right">
-            <li><a id="button-load-data" class="btn">Load</a></li>
+            <!--<li><input id="character-name"/></li>-->
+            <li><a id="button-load-data" class="btn" data-toggle="modal" data-target="#modal-load">Load</a></li>
             <li><a id="button-save-data" class="btn">Save</a></li>
           </ul>
+
+          <div class="col-sm-3 col-md-3 pull-right">
+            <form class="navbar-form" role="search">
+               <div class="input-group">
+                 <input type="text" class="form-control" placeholder="Character name" id="character-name">
+               </div>
+            </form>
+          </div>
         </div><!--/.nav-collapse -->
+
       </div><!--/.container-fluid -->
     </nav>
 
@@ -166,6 +176,24 @@
       </div>
     </div>
 
+    <!-- Modal -->
+    <div class="modal fade" id="modal-load" tabindex="-1" role="dialog">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+            <h4 class="modal-title" id="myModalLabel">Load character</h4>
+          </div>
+          <div class="modal-body">
+            <div id="modal-load-table-content">
+            </div>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        </div>
+      </div>
+    </div>
+
     <!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
@@ -223,6 +251,21 @@
              <span id="base-fight-{{type}}" data-value="1"></span>
              <button type="button" class="btn btn-xs" data-target="#base-fight-{{type}}" data-mode="inc">
                <span class="glyphicon glyphicon-plus" aria-hidden="true"></span>
+             </button>
+           </td>
+         </tr>
+         {{/each}}
+       </table>
+    </script>
+
+    <script id="modal-load-table-template" type="text/x-handlebars-template">
+       <table class="table table-striped">
+       {{#each characters}}
+         <tr>
+           <th>{{name}}</th>
+           <td>
+             <button type="button" class="btn btn-xs" data-character="{{name}}">
+               <span class="glyphicon glyphicon-remove" aria-hidden="true"></span>
              </button>
            </td>
          </tr>

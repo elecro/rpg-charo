@@ -35,7 +35,16 @@ function connect_attribute_display(prefix, lst) {
 }
 
 function local_save_data() {
-    var save_data = {};
+    var character_name = $("#character-name").val();
+
+    if (!character_name) {
+        alert("No name");
+        return;
+    }
+
+    var save_data = {
+        'character-name': character_name
+    };
 
     data_sets.forEach(function(data_set) {
         var data = window[data_set.name];
@@ -47,11 +56,27 @@ function local_save_data() {
         }
     });
 
-    window.localStorage.setItem("rpg-data", JSON.stringify(save_data));
+    window.localStorage.setItem("rpg-data-" + character_name, JSON.stringify(save_data));
+
+    var characters = JSON.parse(window.localStorage.getItem("rpg-characters")) || [];
+    if (characters.indexOf(character_name) == -1) {
+        characters.push(character_name);
+        window.localStorage.setItem("rpg-characters", JSON.stringify(characters));
+    }
 }
 
-function local_load_data() {
-    var raw_data = window.localStorage.getItem("rpg-data");
+function local_list_data() {
+    var raw_data = window.localStorage.getItem("rpg-characters");
+
+    if (!raw_data) {
+        return [];
+    }
+
+    return JSON.parse(raw_data);
+}
+
+function local_load_data(character_name) {
+    var raw_data = window.localStorage.getItem("rpg-data-" + character_name);
 
     if (!raw_data) {
         return;
@@ -90,6 +115,17 @@ function get_attr_selector(attr_name) {
     }
 
     return;
+}
+
+
+function update_modal_load_content() {
+    var characters = [];
+
+    local_list_data().forEach(function(value) {
+        characters.push({name: value});
+    });
+
+    build_from_template("#modal-load-table", { characters: characters });
 }
 
 var attributes_list = [
@@ -157,6 +193,6 @@ $(document).ready(function() {
     connect_attribute_buttons("table.weapons", "#weapon-0");
 
     Connections.init();
-    $("#button-load-data").click(local_load_data);
     $("#button-save-data").click(local_save_data);
+    $('#modal-load').on('show.bs.modal', update_modal_load_content);
 });
